@@ -13,5 +13,8 @@
 	<form action="register.jsp">
 		<input type="submit" value="Register" />
 	</form>
+	<% if ( request.getAttribute( "message" ) != null ) { %>
+	<%=request.getAttribute( "message" )%>
+	<% } %>
 </body>
 </html>

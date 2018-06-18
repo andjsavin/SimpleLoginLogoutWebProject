@@ -17,14 +17,14 @@ import Model.Database;
 /**
  * Servlet implementation class Dane1Servlet
  */
-@WebServlet({ "/LoginServlet", "/login.do" })
-public class LoginServlet extends HttpServlet {
+@WebServlet({ "/ChangePasswordServlet", "/change.do" })
+public class ChangePasswordServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public LoginServlet() {
+	public ChangePasswordServlet() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -39,23 +39,14 @@ public class LoginServlet extends HttpServlet {
 		response.setContentType("text/html; charset=UTF-8");
 		request.setCharacterEncoding("UTF-8");
 		response.setCharacterEncoding("UTF-8");
-		String login = request.getParameter("login");
-		String pw = request.getParameter("pw");
-		String url = "/index.jsp";
-		boolean b = false;
+		String url = "/changepw.jsp";
+		HttpSession session = request.getSession(false);
 		try {
-			b = Database.login(login, pw);
-			if (b == true) {
-				HttpSession session = request.getSession();
-				session.setAttribute("curlog",login); 
-				String userid = (String) session.getAttribute("curlog");
-				url = "/loggedin.jsp";
-				request.setAttribute("message", Database.loggedin(userid));
-			}
-			else {
-				String message = "Wrong password or login, try again!";
-				request.setAttribute("message", message);
-			}
+			
+			String log = (String) session.getAttribute("curlog");
+			String oldpw = request.getParameter("oldpw");
+			String newpw = request.getParameter("newpw");
+			Database.changepw(log, oldpw, newpw);
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -63,10 +54,13 @@ public class LoginServlet extends HttpServlet {
 		// if (user == "") {
 		// url = "/signin.jsp";
 		// } else {
-		// url = "/loggedin.jsp";
+		// url = "/ChangePassword.jsp";
 		// request.setAttribute("user", user);
 		// }
-		
+		session.setAttribute("curlog", null);
+		url = "/index.jsp";
+		String message = "Change succesfull, login again!";
+		request.setAttribute("message", message);
 		ServletContext context = getServletContext();
 		RequestDispatcher dispatcher = context.getRequestDispatcher(url);
 		dispatcher.forward(request, response);

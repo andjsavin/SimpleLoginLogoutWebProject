@@ -6,14 +6,12 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <body>
-	<% if ( request.getAttribute( "message" ) != null ) { %>
-	<%=request.getAttribute( "message" )%>
-	<% } %>
+	<form action="change.do" method="GET">
+		Old password: <input type="text" name="oldpw">
+		 <br> 
+		New password: <input type="text" name="newpw">
+		 <br>
+		<input type="submit" value="Submit" />
+	</form>
 </body>
-<form action="loggedin.do">
-		<input type="submit" value="Logout" />
-	</form>
-<form action="changepw.jsp">
-		<input type="submit" value="Change password" />
-	</form>
 </html>

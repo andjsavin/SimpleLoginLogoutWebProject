@@ -73,6 +73,7 @@ public class Database extends SQLException {
 						statement.setInt(1, blocked);
 						statement.setString(2, login);
 						statement.executeUpdate();
+						return false;
 					} else {
 						blocked = 0;
 						statement.close();
@@ -89,6 +90,7 @@ public class Database extends SQLException {
 						statement.setString(3, login);
 						statement.executeUpdate();
 						statement.close();
+						return false;
 					}
 				}
 			}
@@ -202,6 +204,43 @@ public class Database extends SQLException {
 			statement.setTimestamp(2, timestamp);
 			statement.setString(3, login);
 			statement.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (resultSet != null)
+				resultSet.close();
+			if (statement != null)
+				statement.close();
+			if (connection != null)
+				connection.close();
+		}
+		return;
+	}
+	
+	public static void changepw(String login, String oldpw, String newpw) throws SQLException {
+		Connection connection = null;
+		PreparedStatement statement = null;
+		ResultSet resultSet = null;
+		String DRIVER = "oracle.jdbc.driver.OracleDriver";
+		String URL = "jdbc:oracle:thin:@localhost:1521:xe";
+		String USER = "SYSTEM";
+		String PASSWORD = "12345";
+		String QUERY1 = "SELECT * FROM USERS WHERE LOGIN = ? AND PASSWORD = ?";
+		String QUERY2 = "UPDATE USERS SET PASSWORD = ? WHERE LOGIN = ?";
+		try {
+			Class.forName(DRIVER);
+			connection = DriverManager.getConnection(URL, USER, PASSWORD);
+			statement = connection.prepareStatement(QUERY1);
+			statement.setString(1, login);
+			statement.setString(2, oldpw);
+			resultSet = statement.executeQuery();
+			if (resultSet.next()) {
+				statement.close();
+				statement = connection.prepareStatement(QUERY2);
+				statement.setString(1, newpw);
+				statement.setString(2, login);
+				statement.executeUpdate();
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {

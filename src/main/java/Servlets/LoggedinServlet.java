@@ -44,6 +44,7 @@ public class LoggedinServlet extends HttpServlet {
 			HttpSession session = request.getSession(false);
 			String log = (String) session.getAttribute("curlog"); 
 			Database.logout(log);
+			session.setAttribute("curlog", null);
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
