@@ -55,6 +55,7 @@ public class Database extends SQLException {
 					statement.setString(4, login);
 					statement.setString(5, password);
 					statement.executeUpdate();
+					return true;
 				} else {
 					return false;
 				}
@@ -104,7 +105,7 @@ public class Database extends SQLException {
 			if (connection != null)
 				connection.close();
 		}
-		return true;
+		return false;
 	}
 
 	public static String register(String name, String surname, String login, String password) throws SQLException {
